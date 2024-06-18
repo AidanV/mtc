@@ -67,7 +67,15 @@ executable mtc
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
-    build-depends:    base ^>=4.18.2.1, brick ==2.3.1 
+    build-depends:    
+      base ^>=4.18.2.1, 
+      brick ^>=2.3.1, 
+      text ^>=2.0.2,
+      vty ^>=6.2,
+      microlens ^>=0.4.13.1,
+      microlens-th ^>=0.4.3.15,
+      vty-crossplatform ^>=0.4.0.0
+
 
     -- Directories containing source files.
     hs-source-dirs:   app
