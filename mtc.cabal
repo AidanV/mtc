@@ -74,7 +74,11 @@ executable mtc
       vty ^>=6.2,
       microlens ^>=0.4.13.1,
       microlens-th ^>=0.4.3.15,
-      vty-crossplatform ^>=0.4.0.0
+      microlens-mtl ^>=0.2.0.3,
+      vty-crossplatform ^>=0.4.0.0,
+      mtl ^>=2.3.1,
+      vector ^>=0.13.1.0,
+      word-wrap ^>=0.5
 
 
     -- Directories containing source files.
