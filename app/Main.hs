@@ -14,7 +14,6 @@ import Brick.Widgets.Core
   ( (<+>)
   , (<=>)
   , hLimit
-  , vLimit
   , str
   )
 import qualified Brick.Widgets.Center as C
@@ -27,7 +26,7 @@ data Name = EditEquation deriving (Ord, Show, Eq)
 
 data St =
     St { _focusRing :: F.FocusRing Name
-       , _edit1 :: E.Editor String Name
+       , _editEquation :: E.Editor String Name
        }
 
 makeLenses ''St
@@ -35,10 +34,9 @@ makeLenses ''St
 drawUI :: St -> [T.Widget Name]
 drawUI st = [ui]
     where
-        e1 = F.withFocusRing (st^.focusRing) (E.renderEditor (str . unlines)) (st^.edit1)
-
+        e1 = F.withFocusRing (st^.focusRing) (E.renderEditor (str . unlines)) (st^.editEquation)
         ui = C.center $
-            (str "Input 1 (unlimited): " <+> hLimit 30 e1) <=>
+            (str "Enter Equation: " <+> hLimit 30 e1) <=>
             str " " <=>
             str "Press Tab to switch between editors, Esc to quit."
 
@@ -52,7 +50,7 @@ appEvent (T.VtyEvent (V.EvKey V.KBackTab [])) =
 appEvent ev = do
     r <- use focusRing
     case F.focusGetCurrent r of
-      Just EditEquation -> zoom edit1 $ E.handleEditorEvent ev
+      Just EditEquation -> zoom editEquation $ E.handleEditorEvent ev
       Nothing -> return ()
 
 initialState :: St
@@ -62,9 +60,7 @@ initialState =
 
 theMap :: A.AttrMap
 theMap = A.attrMap V.defAttr
-    [ (E.editAttr,                   V.white `on` V.blue)
-    , (E.editFocusedAttr,            V.black `on` V.yellow)
-    ]
+    [ (E.editAttr, V.black `on` V.white) ]
 
 appCursor :: St -> [T.CursorLocation Name] -> Maybe (T.CursorLocation Name)
 appCursor = F.focusRingCursor (^.focusRing)
@@ -82,4 +78,4 @@ main :: IO ()
 main = do
     st <- M.defaultMain theApp initialState
     putStrLn "In input 1 you entered:\n"
-    putStrLn $ unlines $ E.getEditContents $ st^.edit1
+    putStrLn $ unlines $ E.getEditContents $ st^.editEquation
