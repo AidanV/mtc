@@ -47,6 +47,8 @@ appEvent (T.VtyEvent (V.EvKey (V.KChar '\t') [])) =
     focusRing %= F.focusNext
 appEvent (T.VtyEvent (V.EvKey V.KBackTab [])) =
     focusRing %= F.focusPrev
+appEvent (T.VtyEvent (V.EvKey V.KEnter [])) =
+    M.halt
 appEvent ev = do
     r <- use focusRing
     case F.focusGetCurrent r of
