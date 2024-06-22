@@ -22,6 +22,8 @@ import qualified Brick.AttrMap as A
 import qualified Brick.Focus as F
 import Brick.Util (on)
 
+import Backend
+
 data Name = EditEquation deriving (Ord, Show, Eq)
 
 data St =
@@ -48,7 +50,7 @@ appEvent (T.VtyEvent (V.EvKey (V.KChar '\t') [])) =
 appEvent (T.VtyEvent (V.EvKey V.KBackTab [])) =
     focusRing %= F.focusPrev
 appEvent (T.VtyEvent (V.EvKey V.KEnter [])) =
-    M.halt
+    test
 appEvent ev = do
     r <- use focusRing
     case F.focusGetCurrent r of
