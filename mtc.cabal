@@ -78,7 +78,8 @@ executable mtc
       vty-crossplatform ^>=0.4.0.0,
       mtl ^>=2.3.1,
       vector ^>=0.13.1.0,
-      word-wrap ^>=0.5
+      word-wrap ^>=0.5,
+      text-zipper ^>=0.13
 
 
     -- Directories containing source files.
