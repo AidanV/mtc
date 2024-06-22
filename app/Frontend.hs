@@ -22,14 +22,6 @@ import qualified Brick.AttrMap as A
 import qualified Brick.Focus as F
 import Brick.Util (on)
 
-import qualified Debug.Trace
-
-import qualified Data.Text.Zipper
-
---import Control.Monad (void)
-import Lens.Micro ((^.), (^?), over, ix, singular, _head, each)
-import Lens.Micro.Extras
-import Lens.Micro.TH
 
 import Backend
 
@@ -58,13 +50,10 @@ appEvent (T.VtyEvent (V.EvKey (V.KChar '\t') [])) =
     focusRing %= F.focusNext
 appEvent (T.VtyEvent (V.EvKey V.KBackTab [])) =
     focusRing %= F.focusPrev
-appEvent (T.VtyEvent (V.EvKey V.KEnter [])) =
-    --Debug.Trace.trace (calculate "1 + 2") 
-    let 
-        newState = St (F.focusRing [EditEquation])
-                      (E.editor EditEquation (Just 1) (calculate "1 + 2"))
-    in
-        T.put newState
+appEvent (T.VtyEvent (V.EvKey V.KEnter [])) = do
+    s <- T.get
+    T.put $ St (F.focusRing [EditEquation])
+            (E.editor EditEquation (Just 1) (calculate $ unlines $ E.getEditContents $ s^.editEquation))
 appEvent ev = do
     r <- use focusRing
     case F.focusGetCurrent r of
