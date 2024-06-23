@@ -4,7 +4,6 @@
 
 module Main where
 
-import Calc
 import qualified Brick.AttrMap as A
 import qualified Brick.Focus as F
 import qualified Brick.Main as M
@@ -18,6 +17,7 @@ import Brick.Widgets.Core
     (<=>),
   )
 import qualified Brick.Widgets.Edit as E
+import Calc
 import qualified Graphics.Vty as V
 import Lens.Micro
 import Lens.Micro.Mtl
