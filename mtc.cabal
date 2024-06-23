@@ -56,7 +56,7 @@ common warnings
 library calc-lib
     exposed-modules: Calc
     hs-source-dirs: lib
-    build-depends: base ^>=4.18.2.1
+    build-depends: base
     default-language: Haskell2010
 
 executable mtc
@@ -74,17 +74,17 @@ executable mtc
     -- Other library packages from which modules are imported.
     build-depends:    
       calc-lib,
-      base ^>=4.18.2.1, 
-      brick ^>=2.3.1, 
-      text ^>=2.0.2,
-      vty ^>=6.2,
-      microlens ^>=0.4.13.1,
-      microlens-th ^>=0.4.3.15,
-      microlens-mtl ^>=0.2.0.3,
-      vty-crossplatform ^>=0.4.0.0,
-      mtl ^>=2.3.1,
-      vector ^>=0.13.1.0,
-      word-wrap ^>=0.5,
+      base, 
+      brick, 
+      text,
+      vty,
+      microlens,
+      microlens-th,
+      microlens-mtl,
+      vty-crossplatform,
+      mtl,
+      vector,
+      word-wrap,
       split ^>= 0.2.5
 
 
@@ -97,6 +97,6 @@ executable mtc
 test-suite tests
     type: exitcode-stdio-1.0
     main-is: BackendTests.hs
-    build-depends: base ^>=4.18.2.1, HUnit ^>=1.6, calc-lib
+    build-depends: base, HUnit, calc-lib
     hs-source-dirs: tests
     default-language: Haskell2010
