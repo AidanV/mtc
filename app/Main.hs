@@ -4,7 +4,7 @@
 
 module Main where
 
-import Backend
+import Calc
 import qualified Brick.AttrMap as A
 import qualified Brick.Focus as F
 import qualified Brick.Main as M

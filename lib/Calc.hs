@@ -1,4 +1,4 @@
-module Backend where
+module Calc where
 
 -- TODO: Figure out why Num does not work
 calculate :: String -> Double -- (Num a, Read a, Show a) => String -> a
