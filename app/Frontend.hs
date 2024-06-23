@@ -53,7 +53,7 @@ appEvent (T.VtyEvent (V.EvKey V.KBackTab [])) =
 appEvent (T.VtyEvent (V.EvKey V.KEnter [])) = do
     s <- T.get
     T.put $ St (F.focusRing [EditEquation])
-            (E.editor EditEquation (Just 1) (calculate $ unlines $ E.getEditContents $ s^.editEquation))
+            (E.editor EditEquation (Just 1) (show $ calculate $ unlines $ E.getEditContents $ s^.editEquation))
 appEvent ev = do
     r <- use focusRing
     case F.focusGetCurrent r of

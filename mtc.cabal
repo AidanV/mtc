@@ -79,7 +79,7 @@ executable mtc
       mtl ^>=2.3.1,
       vector ^>=0.13.1.0,
       word-wrap ^>=0.5,
-      text-zipper ^>=0.13
+      split ^>= 0.2.5
 
 
     -- Directories containing source files.
