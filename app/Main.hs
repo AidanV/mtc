@@ -9,6 +9,7 @@ import qualified Brick.Focus as F
 import qualified Brick.Main as M
 import qualified Brick.Types as T
 import Brick.Util (on)
+import Brick.Widgets.Border
 import qualified Brick.Widgets.Center as C
 import Brick.Widgets.Core
   ( hLimit,
@@ -16,6 +17,7 @@ import Brick.Widgets.Core
     (<+>),
     (<=>),
   )
+import qualified Brick.Widgets.Core
 import qualified Brick.Widgets.Edit as E
 import Calc
 import qualified Graphics.Vty as V
@@ -23,10 +25,11 @@ import Lens.Micro
 import Lens.Micro.Mtl
 import Lens.Micro.TH
 
-data Name = EditEquation deriving (Ord, Show, Eq)
+data Name = Answer | EditEquation deriving (Ord, Show, Eq)
 
 data St = St
   { _focusRing :: F.FocusRing Name,
+    _previousAnswers :: [String],
     _editEquation :: E.Editor String Name
   }
 
@@ -38,7 +41,8 @@ drawUI st = [ui]
     e1 = F.withFocusRing (st ^. focusRing) (E.renderEditor (str . unlines)) (st ^. editEquation)
     ui =
       C.center $
-        (str "Enter Equation: " <+> hLimit 30 e1)
+        Brick.Widgets.Border.borderWithLabel (str "test") (C.center (str $ head (st ^. previousAnswers)))
+          <=> (str "Enter Equation: " <+> hLimit 30 e1)
           <=> str " "
           <=> str "Press Tab to switch between editors, Esc to quit."
 
@@ -51,20 +55,23 @@ appEvent (T.VtyEvent (V.EvKey V.KBackTab [])) =
   focusRing %= F.focusPrev
 appEvent (T.VtyEvent (V.EvKey V.KEnter [])) = do
   s <- T.get
+  let ans = show $ calculate $ unlines $ E.getEditContents $ s ^. editEquation
   T.put $
     St
       (F.focusRing [EditEquation])
-      (E.editor EditEquation (Just 1) (show $ calculate $ unlines $ E.getEditContents $ s ^. editEquation))
+      (ans : (s ^. previousAnswers))
+      (E.editor EditEquation (Just 1) ans)
 appEvent ev = do
   r <- use focusRing
   case F.focusGetCurrent r of
     Just EditEquation -> zoom editEquation $ E.handleEditorEvent ev
-    Nothing -> return ()
+    _ -> return ()
 
 initialState :: St
 initialState =
   St
     (F.focusRing [EditEquation])
+    ["N/A"]
     (E.editor EditEquation (Just 1) "")
 
 theMap :: A.AttrMap
