@@ -25,7 +25,7 @@ import Lens.Micro
 import Lens.Micro.Mtl
 import Lens.Micro.TH
 
-data Name = Answer | EditEquation deriving (Ord, Show, Eq)
+data Name = EditEquation deriving (Ord, Show, Eq)
 
 data St = St
   { _focusRing :: F.FocusRing Name,
@@ -41,7 +41,7 @@ drawUI st = [ui]
     e1 = F.withFocusRing (st ^. focusRing) (E.renderEditor (str . unlines)) (st ^. editEquation)
     ui =
       C.center $
-        Brick.Widgets.Border.borderWithLabel (str "test") (C.center (str $ head (st ^. previousAnswers)))
+        Brick.Widgets.Border.borderWithLabel (str "Answers") (Brick.Widgets.Core.padLeftRight 20 (Brick.Widgets.Core.padAll 1 (Brick.Widgets.Core.vBox $ map str (st ^. previousAnswers))))
           <=> (str "Enter Equation: " <+> hLimit 30 e1)
           <=> str " "
           <=> str "Press Tab to switch between editors, Esc to quit."
@@ -71,7 +71,7 @@ initialState :: St
 initialState =
   St
     (F.focusRing [EditEquation])
-    ["N/A"]
+    []
     (E.editor EditEquation (Just 1) "")
 
 theMap :: A.AttrMap
