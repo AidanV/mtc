@@ -1,7 +1,7 @@
+{-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE BlockArguments #-}
 
 module Main where
 
@@ -48,7 +48,7 @@ drawUI st = [ui]
               20
               ( Brick.Widgets.Core.padAll
                   1
-                  (Brick.Widgets.Core.vBox $ zipWith (\ i e -> str ([i] ++ ":  " ++ e)) ['a'..] (st ^. previousAnswers))
+                  (Brick.Widgets.Core.vBox $ zipWith (\i e -> str ([i] ++ ":  " ++ e)) ['a' ..] (st ^. previousAnswers))
               )
           )
           <=> Brick.Widgets.Border.border (str "= " <+> hLimit 30 e1)
