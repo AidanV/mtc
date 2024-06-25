@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE BlockArguments #-}
 
 module Main where
 
@@ -41,10 +42,16 @@ drawUI st = [ui]
     e1 = F.withFocusRing (st ^. focusRing) (E.renderEditor (str . unlines)) (st ^. editEquation)
     ui =
       C.center $
-        Brick.Widgets.Border.borderWithLabel (str "Answers") (Brick.Widgets.Core.padLeftRight 20 (Brick.Widgets.Core.padAll 1 (Brick.Widgets.Core.vBox $ map str (st ^. previousAnswers))))
-          <=> (str "Enter Equation: " <+> hLimit 30 e1)
-          <=> str " "
-          <=> str "Press Tab to switch between editors, Esc to quit."
+        Brick.Widgets.Border.borderWithLabel
+          (str "Answers")
+          ( Brick.Widgets.Core.padLeftRight
+              20
+              ( Brick.Widgets.Core.padAll
+                  1
+                  (Brick.Widgets.Core.vBox $ zipWith (\ i e -> str ([i] ++ ":  " ++ e)) ['a'..] (st ^. previousAnswers))
+              )
+          )
+          <=> Brick.Widgets.Border.border (str "= " <+> hLimit 30 e1)
 
 appEvent :: T.BrickEvent Name e -> T.EventM Name St ()
 appEvent (T.VtyEvent (V.EvKey V.KEsc [])) =
@@ -59,7 +66,7 @@ appEvent (T.VtyEvent (V.EvKey V.KEnter [])) = do
   T.put $
     St
       (F.focusRing [EditEquation])
-      (ans : (s ^. previousAnswers))
+      (take 10 (ans : (s ^. previousAnswers)))
       (E.editor EditEquation (Just 1) ans)
 appEvent ev = do
   r <- use focusRing
