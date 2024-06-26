@@ -1,7 +1,7 @@
+{-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE BlockArguments #-}
 
 module Main where
 
@@ -40,18 +40,24 @@ drawUI :: St -> [T.Widget Name]
 drawUI st = [ui]
   where
     e1 = F.withFocusRing (st ^. focusRing) (E.renderEditor (str . unlines)) (st ^. editEquation)
+    merge :: [a] -> [a] -> [a]
+    merge xs [] = xs
+    merge [] ys = ys
+    merge (_ : xs) (y : ys) = y : merge xs ys
     ui =
       C.center $
         Brick.Widgets.Border.borderWithLabel
           (str "Answers")
-          ( Brick.Widgets.Core.padLeftRight
-              20
-              ( Brick.Widgets.Core.padAll
-                  1
-                  (Brick.Widgets.Core.vBox $ zipWith (\ i e -> str ([i] ++ ":  " ++ e)) ['a'..] (st ^. previousAnswers))
+          ( hLimit
+              50
+              ( Brick.Widgets.Core.padLeftRight
+                  15
+                  case st ^. previousAnswers of
+                    [] -> str "                          "
+                    prevAns -> Brick.Widgets.Core.vBox $ zipWith (\i e -> str ([i] ++ ":  " ++ e)) ['a' ..] $ map (reverse . merge (replicate 16 ' ') . reverse) prevAns
               )
           )
-          <=> Brick.Widgets.Border.border (str "= " <+> hLimit 30 e1)
+          <=> Brick.Widgets.Border.border (str "= " <+> hLimit 48 e1)
 
 appEvent :: T.BrickEvent Name e -> T.EventM Name St ()
 appEvent (T.VtyEvent (V.EvKey V.KEsc [])) =
