@@ -109,5 +109,5 @@ theApp =
 main :: IO ()
 main = do
   st <- M.defaultMain theApp initialState
-  putStrLn "In input 1 you entered:\n"
+  putStrLn "Your results was:\n"
   putStrLn $ unlines $ E.getEditContents $ st ^. editEquation
