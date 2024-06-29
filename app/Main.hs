@@ -54,7 +54,7 @@ drawUI st = [ui]
                   15
                   case st ^. previousAnswers of
                     [] -> str "                          "
-                    prevAns -> Brick.Widgets.Core.vBox $ zipWith (\i e -> str ([i] ++ ":  " ++ e)) ['a' ..] $ map (reverse . merge (replicate 16 ' ') . reverse) prevAns
+                    prevAns -> Brick.Widgets.Core.vBox $ reverse $ zipWith (\i e -> str ([i] ++ ":  " ++ e)) ['a' ..] $ map (reverse . merge (replicate 16 ' ') . reverse) prevAns
               )
           )
           <=> Brick.Widgets.Border.border (str "= " <+> hLimit 48 e1)
