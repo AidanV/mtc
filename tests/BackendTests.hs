@@ -25,6 +25,9 @@ testNaturalLog = TestCase (assertEqual "Calculating: 2.718281828459045 ln" 1.0 $
 testSqrt :: Test
 testSqrt = TestCase (assertEqual "Calculating: 16 sqrt" 4.0 $ calculate "16 sqrt")
 
+testAdditionWithVar :: Test
+testAdditionWithVar = TestCase (assertEqual "Calculating: 1 a + where a = 10" 11.0 $ calculateWithVar ["10.0"] "1 a +")
+
 tests :: Test
 tests =
   TestList
@@ -34,7 +37,8 @@ tests =
       TestLabel "Test Division" testDivision,
       TestLabel "Test Exponentiation" testExponentiation,
       TestLabel "Test Natual Log" testNaturalLog,
-      TestLabel "Test Sqrt" testSqrt
+      TestLabel "Test Sqrt" testSqrt,
+      TestLabel "Test Addition w/ Var" testAdditionWithVar
     ]
 
 main :: IO ()

@@ -68,7 +68,7 @@ appEvent (T.VtyEvent (V.EvKey V.KBackTab [])) =
   focusRing %= F.focusPrev
 appEvent (T.VtyEvent (V.EvKey V.KEnter [])) = do
   s <- T.get
-  let ans = show $ calculate $ unlines $ E.getEditContents $ s ^. editEquation
+  let ans = show $ calculateWithVar (s ^. previousAnswers) $ unlines $ E.getEditContents $ s ^. editEquation
   T.put $
     St
       (F.focusRing [EditEquation])
