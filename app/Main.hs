@@ -72,24 +72,32 @@ appEvent (T.VtyEvent (V.EvKey V.KBackTab [])) =
   focusRing %= F.focusPrev
 appEvent (T.VtyEvent (V.EvKey V.KEnter [])) = do
   s <- T.get
-  let ans = calculateWithVar (s ^. previousAnswers) $ unlines $ E.getEditContents $ s ^. editEquation
-  let shownAns = maybe "Not a valid equation" show ans
-  case ans of
-    Just a ->
+  case s ^. maybeError of
+    Just _ ->
       T.put $
-        St
-          (F.focusRing [EditEquation])
-          (take 10 (show a : (s ^. previousAnswers)))
-          (E.editor EditEquation (Just 1) (show a))
-          Nothing
+              St
+                (F.focusRing [EditEquation])
+                (s ^. previousAnswers)
+                (E.editor EditEquation (Just 1) "")
+                Nothing
     Nothing ->
-      let dialog = D.dialog (Just $ str "Title") (Just (Dialog, [("Enter", Dialog, Enter)])) 50 in
-      T.put $
-        St
-          (F.focusRing [EditEquation])
-          (s ^. previousAnswers)
-          (E.editor EditEquation (Just 1) "")
-          (Just (D.renderDialog dialog $ C.hCenter $ Brick.Widgets.Core.padAll 1 $ str "This is the dialog body."))
+      let ans = calculateWithVar (s ^. previousAnswers) $ unlines $ E.getEditContents $ s ^. editEquation in
+        case ans of
+          Just a ->
+            T.put $
+              St
+                (F.focusRing [EditEquation])
+                (take 10 (show a : (s ^. previousAnswers)))
+                (E.editor EditEquation (Just 1) (show a))
+                Nothing
+          Nothing ->
+            let dialog = D.dialog (Just $ str "ERROR!") (Just (Dialog, [("Press Enter", Dialog, Enter)])) 50 in
+            T.put $
+              St
+                (F.focusRing [EditEquation])
+                (s ^. previousAnswers)
+                (E.editor EditEquation (Just 1) "")
+                (Just (D.renderDialog dialog $ C.hCenter $ Brick.Widgets.Core.padAll 1 $ str "This is not valid reverse polish notation!"))
 appEvent ev = do
   r <- use focusRing
   case F.focusGetCurrent r of
