@@ -4,17 +4,17 @@ import Text.Read
 
 calculateWithVar :: [String] -> String -> Maybe Double
 calculateWithVar prevAns eq =
-  let variables = zip ['a' ..] prevAns
-      replacedString = foldl (\acc (c, prevAns) -> replaceCharWithString c prevAns acc) eq variables
-   in calculate replacedString
+  let variables = zip (map (\x -> '#' :[x]) ['a' ..]) prevAns
+      replacedString = foldl (\acc (i, prevAns) -> replace i prevAns acc) eq variables
+  in calculate replacedString
+  where 
+    replace from to [] = []
+    replace from to s@(x:xs) = 
+          if take (length from) s == from 
+            then to ++ replace from to (drop (length from) s)
+            else x : replace from to xs 
 
-replaceCharWithString :: Char -> String -> String -> String
-replaceCharWithString c replacement [] =
-  []
-replaceCharWithString c replacement (firstChar : rest) =
-  if firstChar == c
-    then replacement ++ replaceCharWithString c replacement rest
-    else firstChar : replaceCharWithString c replacement rest
+
 
 -- TODO: Figure out why Num does not work
 calculate :: String -> Maybe Double -- (Num a, Read a, Show a) => String -> a

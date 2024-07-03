@@ -26,7 +26,7 @@ testSqrt :: Test
 testSqrt = TestCase (assertEqual "Calculating: 16 sqrt" (Just 4.0) $ calculate "16 sqrt")
 
 testAdditionWithVar :: Test
-testAdditionWithVar = TestCase (assertEqual "Calculating: 1 a + where a = 10" (Just 11.0) $ calculateWithVar ["10.0"] "1 a +")
+testAdditionWithVar = TestCase (assertEqual "Calculating: 1 #1 + where #1 = 10" (Just 11.0) $ calculateWithVar ["10.0"] "1 #1 +")
 
 testPointOne :: Test
 testPointOne = TestCase (assertEqual "Calculate: .1" (Just 0.1) $ calculate ".1")

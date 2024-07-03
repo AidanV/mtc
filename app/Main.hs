@@ -58,7 +58,10 @@ drawUI st = maybe [ui] (:[]) (st ^. maybeError)
                   15
                   case st ^. previousAnswers of
                     [] -> str "                          "
-                    prevAns -> Brick.Widgets.Core.vBox $ reverse $ zipWith (\i e -> str ([i] ++ ":  " ++ e)) ['a' ..] $ map (reverse . merge (replicate 16 ' ') . reverse) prevAns
+                    prevAns -> Brick.Widgets.Core.vBox $
+                      reverse $
+                      zipWith (\i e -> str ("#" ++ [i] ++ " : " ++ e)) ['a' ..] $
+                      map (reverse . merge (replicate 15 ' ') . reverse) prevAns
               )
           )
           <=> Brick.Widgets.Border.border (str "= " <+> hLimit 48 e1)
