@@ -33,6 +33,7 @@ calcFromRPN =
     f (Just x : xs) "ln" = Just (log x) : xs
     f (Just x : xs) "sqrt" = Just (sqrt x) : xs
     f xs "pi" = Just pi : xs
+    f xs "e" = Just (exp 1) : xs
     f xs numberString = (readMaybe ns :: Maybe Double) : xs
       where
         ns =
