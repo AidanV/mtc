@@ -35,6 +35,12 @@ calcFromRPN =
     f xs numberString = (readMaybe ns :: Maybe Double) : xs
       where
         ns =
-          if head numberString == '.'
-            then '0' : numberString
-            else numberString
+          (fixStart . fixEnd) numberString
+        fixStart n = 
+          if head n == '.'
+            then '0' : n
+            else n
+        fixEnd n =
+          if last n == '.'
+            then n ++ "0"
+            else n

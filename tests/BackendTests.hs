@@ -31,6 +31,9 @@ testAdditionWithVar = TestCase (assertEqual "Calculating: 1 #a + where #a = 10" 
 testPointOne :: Test
 testPointOne = TestCase (assertEqual "Calculate: .1" (Just 0.1) $ calculate ".1")
 
+testOnePoint :: Test
+testOnePoint = TestCase (assertEqual "Calculate: 1." (Just 1.0) $ calculate "1.")
+
 tests :: Test
 tests =
   TestList
@@ -42,7 +45,8 @@ tests =
       TestLabel "Test Natual Log" testNaturalLog,
       TestLabel "Test Sqrt" testSqrt,
       TestLabel "Test Addition w/ Var" testAdditionWithVar,
-      TestLabel "Test .1" testPointOne
+      TestLabel "Test .1" testPointOne,
+      TestLabel "Test 1." testOnePoint
     ]
 
 main :: IO ()
