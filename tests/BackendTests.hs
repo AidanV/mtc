@@ -34,6 +34,9 @@ testPointOne = TestCase (assertEqual "Calculate: .1" (Just 0.1) $ calculate ".1"
 testOnePoint :: Test
 testOnePoint = TestCase (assertEqual "Calculate: 1." (Just 1.0) $ calculate "1.")
 
+testPi :: Test
+testPi = TestCase (assertEqual "Calculate: pi" (Just pi) $ calculate "pi")
+
 tests :: Test
 tests =
   TestList
@@ -46,7 +49,8 @@ tests =
       TestLabel "Test Sqrt" testSqrt,
       TestLabel "Test Addition w/ Var" testAdditionWithVar,
       TestLabel "Test .1" testPointOne,
-      TestLabel "Test 1." testOnePoint
+      TestLabel "Test 1." testOnePoint,
+      TestLabel "Test pi" testPi
     ]
 
 main :: IO ()
